@@ -26,20 +26,31 @@ public class Ej1 {
 
     public static void main(String[] args) {
         String nomFichero = "matriz.txt";
+        int[][] num = new int[3][3];
 
-        int num[][] = {{100, 101, 102, 103}, {200, 201, 202, 203}, {300, 301, 302, 303}, {400, 401, 402, 403}};
+//        int num[][] = {{100, 101, 102, 103}, {200, 201, 202, 203}, {300, 301, 302, 303}, {400, 401, 402, 403}};
+        int inicial = 100;
 
+        // Estructura try-with-resources. Instancia el objeto con el fichero a escribir
+        // y se encarga de cerrar el recurso "flujo" una vez finalizadas las operaciones
         try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
 
-            for (int[] is : num) {
-                for (int i : is) {
-                    // Usamos metodo write() para escribir en el buffer
-                    flujo.write(i + " \t");
+            for (int i = 0; i < num.length; i++) {
+                for (int j = 0; j < num[i].length; j++) {
+                    if (j == 0 && i == 0) {
+                        num[0][0] = inicial;
+                    }
+                    if (j == 0) {
+                        num[i][j] = inicial + (inicial * i);
+                        flujo.write(num[i][j] + "\t");
+                    } else {
+                        num[i][j] = inicial + (inicial * i) + j;
+                        flujo.write(num[i][j] + "\t");
+                    }
                 }
-                // Metodo newLine() añade línea en blanco
                 flujo.newLine();
+
             }
-            // Metodo flush() guarda cambios en disco 
             flujo.flush();
 
         } catch (IOException e) {

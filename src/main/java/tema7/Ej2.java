@@ -43,6 +43,7 @@ public class Ej2 {
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
+//            e.printStackTrace(); -- Remarca todos los datos de la excepcion cuando se de
         }
 
     }

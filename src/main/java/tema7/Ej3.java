@@ -31,13 +31,14 @@ public class Ej3 {
 
         try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
 
-            for (int i = 0; i < numLineas; i++) {
+            for (int i = 0; i < numLineas;) {
                 resultado = letra.charAt(ale.nextInt(cantidad));
                 if (resultado != 'X' && resultado != 'x') {
                     flujo.write(resultado + ",");
                 } else {
                     flujo.write(resultado);
                     flujo.newLine();
+                    i++;
                 }
 
                 if (i + 1 == 50) {
