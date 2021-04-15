@@ -39,8 +39,6 @@ public class Prueba {
 
         try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
 
-            flujo.write("TipoVehiculo:Matricula:Marca:Modelo:Color:Precio:Disponible:DatoTipoCoche");
-            flujo.newLine();
             for (Vehiculo e : vehiculos) {
                 String resp = "";
                 if (e instanceof Deportivo) {
