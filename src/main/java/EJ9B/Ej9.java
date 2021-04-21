@@ -190,8 +190,12 @@ public class Ej9 {
                 linea = v.toString();
                 tokens = linea.split(":");
                 Furgoneta f1 = new Furgoneta();
-                int carga = Integer.valueOf(tokens[tokens.length-2]);
-                int vol = Integer.valueOf(tokens[tokens.length-1]);
+                String c = tokens[6];
+                int carga = Integer.valueOf(c);
+                System.out.println(tokens[7]);
+                String volum = tokens[7];
+                int vol = Integer.valueOf(volum);
+                System.out.println(tokens.length);
 
                 String resp = "";
                 if (0 < carga || 0 < vol) {
