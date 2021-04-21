@@ -5,17 +5,19 @@
  */
 package EJ9B;
 
-import Ej7.*;
 import Ej4.Deportivo;
 import Ej4.Furgoneta;
 import Ej4.Turismo;
 import Ej4.Vehiculo;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,17 +51,16 @@ public class Ej9 {
 
         System.out.println("Leyendo el fichero: " + idFichero);
 
-        try (Scanner datosFichero = new Scanner(new FileReader(idFichero))) {
-
+        try (Scanner datosFichero = new Scanner(new File(idFichero))) {
+            datosFichero.nextLine();
             while (datosFichero.hasNextLine()) {
                 linea = datosFichero.nextLine();
 
                 tokens = linea.split(":");
                 Vehiculo tmp = new Vehiculo();
 
-                if (tmp instanceof Deportivo) {
+                if ("1".equals(tokens[0])) {
                     Deportivo deport = new Deportivo();
-
                     deport.setMatricula(tokens[1]);
                     deport.setMarca(tokens[2]);
                     deport.setModelo(tokens[3]);
@@ -69,17 +70,8 @@ public class Ej9 {
                     deport.setCilindrada(Integer.valueOf(tokens[7]));
                     vehiculos.add(deport);
 
-//                    textoAñadir = deport.toString();
-//                    try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idDeportivo))) {
-//                        flujo.write(textoAñadir);
-//                        flujo.newLine();
-//                        flujo.flush();
-//                    } catch (IOException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-                } else if (tmp instanceof Turismo) {
+                } else if ("0".equals(tokens[0])) {
                     Turismo t1 = new Turismo();
-
                     t1.setMatricula(tokens[1]);
                     t1.setMarca(tokens[2]);
                     t1.setModelo(tokens[3]);
@@ -90,17 +82,8 @@ public class Ej9 {
                     t1.setMarchaAutomatica(Boolean.valueOf(tokens[8]));
                     vehiculos.add(t1);
 
-//                    textoAñadir = t1.toString();
-//                    try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idTurismo))) {
-//                        flujo.write(textoAñadir);
-//                        flujo.newLine();
-//                        flujo.flush();
-//                    } catch (IOException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-                } else if (tmp instanceof Furgoneta) {
+                } else if ("3".equals(tokens[0])) {
                     Furgoneta f1 = new Furgoneta();
-
                     f1.setMatricula(tokens[1]);
                     f1.setMarca(tokens[2]);
                     f1.setModelo(tokens[3]);
@@ -110,15 +93,6 @@ public class Ej9 {
                     f1.setCarga(Integer.valueOf(tokens[7]));
                     f1.setVolumen(Integer.valueOf(tokens[8]));
                     vehiculos.add(f1);
-
-//                    textoAñadir = f1.toString();
-//                    try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idFurgoneta))) {
-//                        flujo.write(textoAñadir);
-//                        flujo.newLine();
-//                        flujo.flush();
-//                    } catch (IOException e) {
-//                        System.out.println(e.getMessage());
-//                    }
                 }
             }
 
@@ -126,72 +100,121 @@ public class Ej9 {
             System.out.println(e.getMessage());
         }
 
-//        crearArchivoDeportivo(vehiculos);
-//        crearArchivoFurgoneta(vehiculos);
-//        crearArchivoTurismo(vehiculos);
-//        
-        Comparator<Vehiculo> criterioPrecio = (c1, c2) -> c1.getMarca().compareTo(c2.getMarca());
+        creacionDeportivo(idDeportivo, vehiculos);
+        creacionTurismos(idTurismo, vehiculos);
+        creacionFurgonetas(idFurgoneta, vehiculos);
 
+        Comparator<Vehiculo> criterioPrecio = (c1, c2) -> c1.getMarca().compareTo(c2.getMarca());
         Collections.sort(vehiculos, criterioPrecio);
 
-        for (int i = 0; i < vehiculos.size(); i++) {
-            System.out.println(vehiculos.toString());
-        }
+        vehiculos.forEach(System.out::println);
 
-//        try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idDeportivo))) {
-//            vehiculos.stream().filter((v) -> (v instanceof Deportivo)).map((v) -> new Deportivo(((Deportivo) v).getCilindrada(), v.getMatricula(), v.getMarca(), v.getModelo(), v.getColor(), v.getPrecio(), v.isDisponible())).forEachOrdered((d1) -> {
-//                añadirDeportivo(d1);
-//                System.out.println("Creadp el dep");
-//            });
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
     }
 
-//    public static void añadirDeportivo(Deportivo v) {
-//        String idDeportivo = "deportivos.csv";
-//
-//        try (ObjectOutputStream flujo = new ObjectOutputStream(new FileOutputStream(idDeportivo))) {
-//            flujo.writeObject(v.toString());
-//        } catch (FileNotFoundException e) {
-//            System.out.println("El fichero no existe");
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//    }
+    public static void creacionDeportivo(String nomFichero, ArrayList<Vehiculo> vehi) {
+        String[] tokens;
+        String linea;
+
+        try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
+            for (Vehiculo v : vehi) {
+
+                linea = v.toString();
+                tokens = linea.split(":");
+                Deportivo d1 = new Deportivo();
+
+                String resp = "";
+                if (tokens.length == 7) {
+                    d1.setMatricula(v.getMatricula());
+                    d1.setMarca(v.getMarca());
+                    d1.setModelo(v.getModelo());
+                    d1.setColor(v.getColor());
+                    d1.setPrecio(v.getPrecio());
+                    d1.setDisponible(v.isDisponible());
+                    d1.setCilindrada(((Deportivo) v).getCilindrada());
+
+                    resp = d1.toString();
+                    flujo.write(resp);
+                    flujo.newLine();
+                }
+
+            }
+            flujo.flush();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void creacionTurismos(String nomFichero, ArrayList<Vehiculo> vehi) {
+        String[] tokens;
+        String linea;
+
+        try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
+            for (Vehiculo v : vehi) {
+
+                linea = v.toString();
+                tokens = linea.split(":");
+                Turismo t1 = new Turismo();
+
+                String resp = "";
+                if (tokens[tokens.length-1].equals("false") || tokens[tokens.length-1].equals("true")) {
+                    t1.setMatricula(v.getMatricula());
+                    t1.setMarca(v.getMarca());
+                    t1.setModelo(v.getModelo());
+                    t1.setColor(v.getColor());
+                    t1.setPrecio(v.getPrecio());
+                    t1.setDisponible(v.isDisponible());
+                    t1.setNumeroPuertas(((Turismo) v).getNumeroPuertas());
+                    t1.setMarchaAutomatica(((Turismo) v).isMarchaAutomatica());
+
+                    resp = t1.toString();
+                    flujo.write(resp);
+                    flujo.newLine();
+                }
+
+            }
+            flujo.flush();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void creacionFurgonetas(String nomFichero, ArrayList<Vehiculo> vehi) {
+        String[] tokens;
+        String linea;
+
+        try (BufferedWriter flujo = new BufferedWriter(new FileWriter(nomFichero))) {
+            for (Vehiculo v : vehi) {
+
+                linea = v.toString();
+                tokens = linea.split(":");
+                Furgoneta f1 = new Furgoneta();
+                int carga = Integer.valueOf(tokens[tokens.length-2]);
+                int vol = Integer.valueOf(tokens[tokens.length-1]);
+
+                String resp = "";
+                if (0 < carga || 0 < vol) {
+                    f1.setMatricula(v.getMatricula());
+                    f1.setMarca(v.getMarca());
+                    f1.setModelo(v.getModelo());
+                    f1.setColor(v.getColor());
+                    f1.setPrecio(v.getPrecio());
+                    f1.setDisponible(v.isDisponible());
+                    f1.setCarga(((Furgoneta) v).getCarga());
+                    f1.setVolumen(((Furgoneta) v).getVolumen());
+
+                    resp = f1.toString();
+                    flujo.write(resp);
+                    flujo.newLine();
+                }
+
+            }
+            flujo.flush();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
-//    
-//    public static void crearArchivoTurismo(ArrayList<Vehiculo> vehi) {
-//        String idTurismo = "turismos.csv";
-//        
-//        for (Vehiculo v : vehi) {
-//            if (v instanceof Deportivo) {
-//                try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idTurismo))) {
-//                    flujo.write(v.toString());
-//                    flujo.newLine();
-//                    flujo.flush();
-//                } catch (IOException e) {
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-//        }
-//    }
-//    
-//    public static void crearArchivoFurgoneta(ArrayList<Vehiculo> vehi) {
-//        String idFurgoneta = "furgonetas.csv";
-//        
-//        for (Vehiculo v : vehi) {
-//            if (v instanceof Deportivo) {
-//                try (BufferedWriter flujo = new BufferedWriter(new FileWriter(idFurgoneta))) {
-//                    flujo.write(v.toString());
-//                    flujo.newLine();
-//                    flujo.flush();
-//                } catch (IOException e) {
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-//        }
-//    }
-
