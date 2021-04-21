@@ -108,7 +108,6 @@ public class Ej9 {
         Collections.sort(vehiculos, criterioPrecio);
 
         vehiculos.forEach(System.out::println);
-
     }
 
     public static void creacionDeportivo(String nomFichero, ArrayList<Vehiculo> vehi) {
@@ -144,7 +143,7 @@ public class Ej9 {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public static void creacionTurismos(String nomFichero, ArrayList<Vehiculo> vehi) {
         String[] tokens;
         String linea;
@@ -157,7 +156,7 @@ public class Ej9 {
                 Turismo t1 = new Turismo();
 
                 String resp = "";
-                if (tokens[tokens.length-1].equals("false") || tokens[tokens.length-1].equals("true")) {
+                if (tokens[tokens.length - 1].equals("false") || tokens[tokens.length - 1].equals("true")) {
                     t1.setMatricula(v.getMatricula());
                     t1.setMarca(v.getMarca());
                     t1.setModelo(v.getModelo());
@@ -179,7 +178,7 @@ public class Ej9 {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public static void creacionFurgonetas(String nomFichero, ArrayList<Vehiculo> vehi) {
         String[] tokens;
         String linea;
@@ -190,27 +189,28 @@ public class Ej9 {
                 linea = v.toString();
                 tokens = linea.split(":");
                 Furgoneta f1 = new Furgoneta();
-                String c = tokens[6];
-                int carga = Integer.valueOf(c);
-                System.out.println(tokens[7]);
-                String volum = tokens[7];
-                int vol = Integer.valueOf(volum);
-                System.out.println(tokens.length);
 
-                String resp = "";
-                if (0 < carga || 0 < vol) {
-                    f1.setMatricula(v.getMatricula());
-                    f1.setMarca(v.getMarca());
-                    f1.setModelo(v.getModelo());
-                    f1.setColor(v.getColor());
-                    f1.setPrecio(v.getPrecio());
-                    f1.setDisponible(v.isDisponible());
-                    f1.setCarga(((Furgoneta) v).getCarga());
-                    f1.setVolumen(((Furgoneta) v).getVolumen());
+                if (tokens.length == 8 && !tokens[tokens.length - 1].equals("true") && !tokens[tokens.length - 1].equals("false")) {
+                    String c = tokens[tokens.length - 2];
+                    int carga = Integer.valueOf(c);
+                    System.out.println(tokens[7]);
+                    String volum = tokens[tokens.length - 1];
+                    int vol = Integer.valueOf(volum);
+                    String resp = "";
+                    if (0 < carga || 0 < vol) {
+                        f1.setMatricula(v.getMatricula());
+                        f1.setMarca(v.getMarca());
+                        f1.setModelo(v.getModelo());
+                        f1.setColor(v.getColor());
+                        f1.setPrecio(v.getPrecio());
+                        f1.setDisponible(v.isDisponible());
+                        f1.setCarga(((Furgoneta) v).getCarga());
+                        f1.setVolumen(((Furgoneta) v).getVolumen());
 
-                    resp = f1.toString();
-                    flujo.write(resp);
-                    flujo.newLine();
+                        resp = f1.toString();
+                        flujo.write(resp);
+                        flujo.newLine();
+                    }
                 }
 
             }
